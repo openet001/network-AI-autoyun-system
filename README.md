@@ -7,6 +7,9 @@
 本平台集自然语言AI、网络设备、Windows/Linux服务器和VMware虚拟机于一体，自动化运维能力强大，适合企业自运维及二次开发。
 一个基于 FastAPI + SQLAlchemy + PostgreSQL 的智能网络自动化运维平台，支持设备管理、批量命令、联机检测、用户认证/权限、定时任务等。
 
+支持**网络设备自动化运维、批量操作、设备联机检测、日志追踪、用户权限管理**的全栈平台。  
+前端基于 **Vite + React + Ant Design**，后端基于 **FastAPI + SQLAlchemy + PostgreSQL**。  
+适配 Ubuntu 22.04 LTS，适合企业/实验室智能运维场景。
 
 
 ## 主要特性
@@ -16,45 +19,67 @@
 - 自动API文档
 
 ## 目录结构
-```text
-app/
-  ├── __init__.py
-  ├── main.py
-  ├── database.py
-  ├── models.py
-  ├── schemas.py
-  ├── routers/
-  │    ├── __init__.py
-  │    ├── ai.py
-  │    ├── network.py
-  │    ├── server.py
-  │    ├── vmware.py
-  │    └── auth.py
-  ├── services/
-  │    ├── __init__.py
-  │    ├── ai.py
-  │    ├── server.py
-  │    ├── vmware.py
-  │    └── network/
-  │         ├── __init__.py
-  │         ├── autodetect.py
-  │         ├── cisco.py
-  │         ├── arista.py
-  │         ├── juniper.py
-  │         ├── huawei.py
-  │         ├── h3c.py
-  │         ├── f5.py
-  │         ├── generic.py
-  │         └── ping.py
-  └── utils/
-       ├── __init__.py
-       ├── security.py
-       └── scheduler.py
-db/
-  └── schema.sql
-.env
-requirements.txt
-README.md
+```
+network-AI-autoyun-system/
+├── backend/                      # 后端根目录
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py               # FastAPI 入口
+│   │   ├── database.py           # 数据库连接
+│   │   ├── models.py             # SQLAlchemy模型
+│   │   ├── schemas.py            # Pydantic数据结构
+│   │   ├── routers/
+│   │   │   ├── __init__.py
+│   │   │   ├── ai.py
+│   │   │   ├── auth.py           # 用户认证与权限
+│   │   │   ├── network.py        # 设备/批量/Ping/日志接口
+│   │   │   ├── server.py
+│   │   │   └── vmware.py
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   ├── ai.py
+│   │   │   ├── server.py
+│   │   │   ├── vmware.py
+│   │   │   └── network/
+│   │   │       ├── __init__.py
+│   │   │       ├── autodetect.py
+│   │   │       ├── cisco.py
+│   │   │       ├── arista.py
+│   │   │       ├── juniper.py
+│   │   │       ├── huawei.py
+│   │   │       ├── h3c.py
+│   │   │       ├── f5.py
+│   │   │       ├── generic.py
+│   │   │       └── ping.py
+│   │   └── utils/
+│   │       ├── __init__.py
+│   │       ├── security.py       # 密码hash/校验
+│   │       └── scheduler.py      # 定时任务
+│   ├── db/
+│   │   └── schema.sql            # 数据库建表SQL
+│   ├── .env                      # 数据库连接配置
+│   └── requirements.txt          # 后端依赖
+└── network-ai-frontend/          # 前端根目录
+    ├── index.html
+    ├── package.json
+    ├── vite.config.js
+    ├── README.md
+    └── src/
+        ├── main.jsx
+        ├── App.jsx
+        ├── api.js
+        ├── auth.js
+        ├── components/
+        │   └── PrivateRoute.jsx
+        ├── pages/
+        │   ├── Login.jsx
+        │   ├── DeviceList.jsx
+        │   ├── DeviceDetail.jsx
+        │   ├── BatchExec.jsx
+        │   ├── Logs.jsx
+        │   └── NotFound.jsx
+        └── assets/
+            └── (可选图片/样式等)
 ```
 
 
@@ -168,6 +193,74 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 # 访问API文档: http://localhost:8000/docs
 ```
+
+
+前端部署：
+
+办法（适用于 Ubuntu 22.04 LTS）
+1. 卸载所有旧的 node/nodejs/nodesource 相关包
+bash
+sudo apt-get remove --purge nodejs npm libnode-dev -y
+sudo apt-get autoremove -y
+sudo rm -rf /usr/lib/node_modules
+sudo rm -rf /usr/include/node
+sudo rm -rf /usr/bin/node /usr/bin/npm
+sudo rm -rf /usr/local/bin/node /usr/local/bin/npm
+sudo rm -rf ~/.npm ~/.nvm ~/.node-gyp
+2. 确认 node/npm 已被卸载
+bash
+node -v
+npm -v
+# 都应提示 not found
+3. 重新添加 NodeSource 源并安装 Node.js 20.x
+bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+4. 检查 node/npm 版本
+bash
+node -v    # 应输出 v20.x.x
+npm -v     # 应输出 10.x.x 或更高
+5. （可选）升级 npm 到最新版
+bash
+sudo npm install -g npm@latest
+6. 创建 Vite+React 项目
+bash
+npm create vite@latest network-ai-frontend -- --template react
+cd network-ai-frontend
+npm install
+npm install antd axios react-router-dom
+npm run dev
+要点：libnode-dev（12.x）与新 nodejs 包有冲突，不清理干净安装不了新版。
+解决方案：彻底卸载旧 node 相关包和残留文件，然后再装新版。
+终端会输出本地访问地址，通常是 http://localhost:5173
+ 
+确保后端允许 CORS
+确保后端 FastAPI 添加了如下内容（否则前端无法请求后端）：
+Python 
+from fastapi.middleware.cors import
+ CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+"*"], # 或填写你的前端地址
+    allow_credentials=
+True
+,
+    allow_methods=[
+"*"
+],
+    allow_headers=[
+"*"
+],
+)
+ 
+8. (可选) 打包发布
+bash 
+ 
+npm run build
+# 构建后的静态文件在 dist/ 目录
+
 
 ## 依赖
 见 requirements.txt
