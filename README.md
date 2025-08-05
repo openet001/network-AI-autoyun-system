@@ -6,8 +6,8 @@
 
 本平台集自然语言AI、网络设备、Windows/Linux服务器和VMware虚拟机于一体，自动化运维能力强大，适合企业自运维及二次开发。
 
-network-AI-autoyun-system
-/
+```
+network-AI-autoyun-system/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py
@@ -43,7 +43,7 @@ network-AI-autoyun-system
 ├── .env
 ├── requirements.txt
 └── README.md
-
+```
 
 ## 快速部署
 
