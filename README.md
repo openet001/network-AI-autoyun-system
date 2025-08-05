@@ -144,7 +144,7 @@ GRANT ALL PRIVILEGES ON DATABASE netaiplat TO netaiuser;
 \q
 
 # 克隆代码&安装依赖
-git clone https://github.com/yourname/network-AI-autoyun-system.git
+git clone https://github.com/openet001/network-AI-autoyun-system.git
 cd network-AI-autoyun-system
 python3 -m venv venv
 source venv/bin/activate
