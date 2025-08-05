@@ -117,5 +117,5 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ## 技术交流群
 
-如需源码、定制开发、技术支持可联系作者：your@email.com
+如需源码、定制开发、技术支持可联系作者：847297@qq.com
 
