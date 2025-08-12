@@ -1,5 +1,5 @@
-# 智能化网络与Windows/Linux运维平台
-# network-AI-autoyun-system
+# 智能化网络设备与Windows/Linux服务器运维平台
+# network-ServerAI-autorun-system
 
 
 ## 平台说明
